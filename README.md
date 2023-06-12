@@ -2,7 +2,7 @@
 ```zsh
 pip install -r requirements.txt
 ```
-建議安裝在虛擬環境上
+建議安裝在虛擬環境上，python 版本 >= 3.9
 
 # Usage
 ```zsh

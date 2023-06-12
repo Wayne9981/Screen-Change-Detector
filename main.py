@@ -1,8 +1,8 @@
 import logging
 import sys
+from typing import Union
 
-from pynput import keyboard
-
+from pynput.keyboard import KeyCode, Key, Listener
 from callback import screen_analysis, periodic_screen_analysis
 
 
@@ -19,7 +19,7 @@ class KeyboardEventHandler:
         "y": periodic_screen_analysis,
     }
 
-    def handle(self, key):
+    def handle(self, key: KeyCode):
         print("\r", end="")
         logging.info(f"On press key: {key}")
         handler = self.handler.get(key.char.lower())
@@ -30,14 +30,14 @@ class KeyboardEventHandler:
 keyboard_handler = KeyboardEventHandler()
 
 
-def on_press(key):
-    if isinstance(key, keyboard.KeyCode):
+def on_press(key: Union[KeyCode, Key, None]):
+    if isinstance(key, KeyCode):
         keyboard_handler.handle(key)
-    if key == keyboard.Key.esc:
+    if key == Key.esc:
         return False
 
 
 if __name__ == "__main__":
     # Collect events until released
-    with keyboard.Listener(on_press=on_press) as listener:
+    with Listener(on_press=on_press) as listener:  # type: ignore
         listener.join()
