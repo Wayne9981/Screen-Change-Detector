@@ -44,5 +44,5 @@ def screen_analysis():
 def compare_images(img1: Image, img2: Image) -> float:
     diff_image = ImageChops.difference(img1, img2)
     diff = np.asarray(diff_image, dtype=np.half) / 255  # type: ignore
-    differ = sqrt(np.mean(np.square(diff)))
-    return differ
+    mse = sqrt(np.mean(np.square(diff)))
+    return mse
