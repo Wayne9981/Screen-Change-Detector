@@ -28,3 +28,16 @@ class KeyboardEventHandler:
 
 
 keyboard_handler = KeyboardEventHandler()
+
+
+def on_press(key):
+    if isinstance(key, keyboard.KeyCode):
+        keyboard_handler.handle(key)
+    if key == keyboard.Key.esc:
+        return False
+
+
+if __name__ == "__main__":
+    # Collect events until released
+    with keyboard.Listener(on_press=on_press) as listener:
+        listener.join()
