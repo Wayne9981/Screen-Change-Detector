@@ -35,7 +35,7 @@ def screen_analysis():
         logging.info(f"{diff = :.2%}")
         if diff > DIFF_THRESHOLD:
             os.makedirs(IMAGE_FOLDER, exist_ok=True)
-            file_path = f"{datetime.now().isoformat()}.jpeg"
+            file_path = f"{datetime.now().strftime('%Y-%m-%d_%H%M%S')}.jpeg"
             logging.info(f"{file_path = }")
             img.save(os.path.join(IMAGE_FOLDER, file_path), quality=70)
 
