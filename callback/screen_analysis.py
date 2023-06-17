@@ -2,7 +2,6 @@ import logging
 from collections import deque
 from math import sqrt
 from datetime import datetime
-from time import sleep
 import os
 
 from pyautogui import screenshot
@@ -12,22 +11,12 @@ import numpy as np
 
 from utils import log_times
 
-IMAGE_FOLDER = "images"
-DIFF_THRESHOLD = 0.3
-TIME_INTERVAL_SEC = 5
-
 logger = logging.getLogger(__name__)
 queue = deque(maxlen=2)
 
 
-def periodic_screen_analysis():
-    while True:
-        screen_analysis()
-        sleep(TIME_INTERVAL_SEC)
-
-
 @log_times
-def screen_analysis():
+def _screen_analysis(diff_threshold_percentage: int, image_folder: str):
     img = screenshot()
     img = img.convert("RGB")
     queue.append(img)
@@ -35,12 +24,12 @@ def screen_analysis():
         diff = compare_images(queue[0], queue[1])
         logger.info(f"{diff = :.2%}")
         print(f"diff: {diff:.2%}")
-        if diff > DIFF_THRESHOLD:
-            os.makedirs(IMAGE_FOLDER, exist_ok=True)
+        if diff > diff_threshold_percentage / 100:
+            os.makedirs(image_folder, exist_ok=True)
             file_path = f"{datetime.now().strftime('%Y-%m-%d_%H%M%S')}.jpeg"
             logging.info(f"{file_path = }")
             print(f"Saved image: {file_path}")
-            img.save(os.path.join(IMAGE_FOLDER, file_path), quality=70)
+            img.save(os.path.join(image_folder, file_path), quality=70)
 
 
 @log_times

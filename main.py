@@ -2,7 +2,10 @@ import logging
 from typing import Union
 
 from pynput.keyboard import KeyCode, Key, Listener
-from callback import screen_analysis, periodic_screen_analysis
+
+from src.config import ConfigAccessor
+from src.event_handler import KeyboardEventHandler
+from callback import ScreenAnalysis, PeriodicScreenAnalysis
 
 
 logging.basicConfig(
@@ -13,24 +16,14 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+cfg_accessor = ConfigAccessor()
+hotkeys = cfg_accessor.cfg.hotkeys
+handlers = {
+    hotkeys.screen_analysis: ScreenAnalysis(cfg_accessor),
+    hotkeys.periodic_screen_analysis: PeriodicScreenAnalysis(cfg_accessor),
+}
 
-class KeyboardEventHandler:
-    handler = {
-        "z": screen_analysis,
-        "y": periodic_screen_analysis,
-    }
-
-    def handle(self, key: KeyCode):
-        print(f"\rOn press key: {key}")
-        logging.info(f"On press key: {key}")
-        handler = self.handler.get(key.char.lower())
-        if handler:
-            print(f"{handler.__name__} started")
-            handler()
-            print(f"{handler.__name__} finished")
-
-
-keyboard_handler = KeyboardEventHandler()
+keyboard_handler = KeyboardEventHandler(handlers)
 
 
 def on_press(key: Union[KeyCode, Key, None]):
@@ -40,10 +33,14 @@ def on_press(key: Union[KeyCode, Key, None]):
         return False
 
 
-if __name__ == "__main__":
+def main():
     logger.info("Main.py started")
     print("Main.py started")
     with Listener(on_press=on_press) as listener:  # type: ignore
         listener.join()
     logger.info("Main.py finished")
     print("Main.py finished")
+
+
+if __name__ == "__main__":
+    main()
