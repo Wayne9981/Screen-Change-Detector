@@ -16,6 +16,7 @@ IMAGE_FOLDER = "images"
 DIFF_THRESHOLD = 0.3
 TIME_INTERVAL_SEC = 5
 
+logger = logging.getLogger(__name__)
 queue = deque(maxlen=2)
 
 
@@ -32,11 +33,13 @@ def screen_analysis():
     queue.append(img)
     if len(queue) > 1:
         diff = compare_images(queue[0], queue[1])
-        logging.info(f"{diff = :.2%}")
+        logger.info(f"{diff = :.2%}")
+        print(f"diff: {diff:.2%}")
         if diff > DIFF_THRESHOLD:
             os.makedirs(IMAGE_FOLDER, exist_ok=True)
             file_path = f"{datetime.now().strftime('%Y-%m-%d_%H%M%S')}.jpeg"
             logging.info(f"{file_path = }")
+            print(f"Saved image: {file_path}")
             img.save(os.path.join(IMAGE_FOLDER, file_path), quality=70)
 
 

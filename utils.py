@@ -9,15 +9,15 @@ def log_times(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         mod_name = func.__module__
-
-        logging.debug(
+        logger = logging.getLogger(mod_name)
+        logger.debug(
             f"Start {mod_name}.{func.__name__}: args={str(args)}, kwargs={str(kwargs)}"
         )
         now = time()
         try:
             res = func(*args, **kwargs)
         except Exception as e:
-            logging.exception(f"On exit {mod_name}.{func.__name__}: exception={str(e)}")
+            logger.exception(f"On exit {mod_name}.{func.__name__}: exception={str(e)}")
             raise
         else:
             logging.debug(
