@@ -1,33 +1,31 @@
 import logging
-import sys
 from typing import Union
 
 from pynput.keyboard import KeyCode, Key, Listener
-from callback import screen_analysis, periodic_screen_analysis
+
+from src.config import ConfigAccessor
+from src.event_handler import KeyboardEventHandler, MouseEventHandler
+from callback import ScreenAnalysis, PeriodicScreenAnalysis, SettingConfig
 
 
 logging.basicConfig(
-    stream=sys.stdout,
+    filename="history.log",
     level=logging.DEBUG,
     format="%(levelname)s:%(asctime)s:%(name)s:%(message)s",
 )
 
+logger = logging.getLogger(__name__)
 
-class KeyboardEventHandler:
-    handler = {
-        "z": screen_analysis,
-        "y": periodic_screen_analysis,
-    }
+cfg_accessor = ConfigAccessor()
+hotkeys = cfg_accessor.cfg.hotkeys
+mouse_handler = MouseEventHandler()
 
-    def handle(self, key: KeyCode):
-        print("\r", end="")
-        logging.info(f"On press key: {key}")
-        handler = self.handler.get(key.char.lower())
-        if handler:
-            handler()
-
-
-keyboard_handler = KeyboardEventHandler()
+handlers = {
+    hotkeys.screen_analysis: ScreenAnalysis(cfg_accessor),
+    hotkeys.periodic_screen_analysis: PeriodicScreenAnalysis(cfg_accessor),
+    hotkeys.setting_config: SettingConfig(cfg_accessor, mouse_handler),
+}
+keyboard_handler = KeyboardEventHandler(handlers)
 
 
 def on_press(key: Union[KeyCode, Key, None]):
@@ -37,7 +35,14 @@ def on_press(key: Union[KeyCode, Key, None]):
         return False
 
 
-if __name__ == "__main__":
-    # Collect events until released
+def main():
+    logger.info("Main.py started")
+    print("Main.py started")
     with Listener(on_press=on_press) as listener:  # type: ignore
         listener.join()
+    logger.info("Main.py finished")
+    print("Main.py finished")
+
+
+if __name__ == "__main__":
+    main()
