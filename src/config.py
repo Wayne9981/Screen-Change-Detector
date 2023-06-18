@@ -37,7 +37,7 @@ class ConfigAccessor:
             cfg = json.load(f)
         self.cfg = Config.from_dict(cfg)
 
-    def update(self):
+    def save(self):
         cfg = asdict(self.cfg)
         with open("config.json", "w") as f:
             json.dump(cfg, f, indent=4)

@@ -41,4 +41,4 @@ class SettingConfig:
         except ValueError:
             pass
 
-        self.cfg_proxy.update()
+        self.cfg_proxy.save()
