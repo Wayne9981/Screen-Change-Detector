@@ -1,11 +1,21 @@
 {
-  "image_folder": "images",
-  "diff_threshold_percentage": 30,
-  "time_interval_sec": 5,
-  "analysis_minutes": 120,
-  "screen_shot_area": [[0,0], [50, 50]],
-  "hotkeys": {
-    "screen_analysis": "z",
-    "periodic_screen_analysis": "y"
-  }
+    "image_folder": "images",
+    "diff_threshold_percentage": 30,
+    "time_interval_sec": 2.0,
+    "analysis_minutes": 120,
+    "screen_shot_area": [
+        [
+            0,
+            0
+        ],
+        [
+            50,
+            50
+        ]
+    ],
+    "hotkeys": {
+        "screen_analysis": "z",
+        "periodic_screen_analysis": "y",
+        "setting_config": "s"
+    }
 }

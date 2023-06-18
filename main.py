@@ -5,7 +5,7 @@ from pynput.keyboard import KeyCode, Key, Listener
 
 from src.config import ConfigAccessor
 from src.event_handler import KeyboardEventHandler
-from callback import ScreenAnalysis, PeriodicScreenAnalysis
+from callback import ScreenAnalysis, PeriodicScreenAnalysis, SettingConfig
 
 
 logging.basicConfig(
@@ -21,6 +21,7 @@ hotkeys = cfg_accessor.cfg.hotkeys
 handlers = {
     hotkeys.screen_analysis: ScreenAnalysis(cfg_accessor),
     hotkeys.periodic_screen_analysis: PeriodicScreenAnalysis(cfg_accessor),
+    hotkeys.setting_config: SettingConfig(cfg_accessor),
 }
 
 keyboard_handler = KeyboardEventHandler(handlers)

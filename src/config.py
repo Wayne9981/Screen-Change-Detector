@@ -14,13 +14,14 @@ def dataclass_from_dict(cls, d: dict):
 class Hotkeys:
     screen_analysis: str
     periodic_screen_analysis: str
+    setting_config: str
 
 
 @dataclass
 class Config:
     image_folder: str
     diff_threshold_percentage: int
-    time_interval_sec: int
+    time_interval_sec: float
     analysis_minutes: int
     screen_shot_area: list[list[float]]
     hotkeys: Hotkeys
@@ -39,4 +40,5 @@ class ConfigAccessor:
     def update(self):
         cfg = asdict(self.cfg)
         with open("config.json", "w") as f:
-            json.dump(cfg, f, sort_keys=True)
+            json.dump(cfg, f, indent=4)
+            f.write("\n")
