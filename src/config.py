@@ -23,7 +23,7 @@ class Config:
     diff_threshold_percentage: int
     time_interval_sec: float
     analysis_minutes: int
-    screen_shot_area: list[list[float]]
+    screen_shot_area: list[int]
     hotkeys: Hotkeys
 
     @classmethod

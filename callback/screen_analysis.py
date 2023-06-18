@@ -4,8 +4,7 @@ from math import sqrt
 from datetime import datetime
 import os
 
-from pyautogui import screenshot
-from PIL import ImageChops
+from PIL import ImageChops, ImageGrab
 from PIL.Image import Image
 import numpy as np
 
@@ -16,8 +15,8 @@ queue = deque(maxlen=2)
 
 
 @log_times
-def _screen_analysis(diff_threshold_percentage: int, image_folder: str):
-    img = screenshot()
+def _screen_analysis(diff_threshold_percentage: int, image_folder: str, box: list[int]):
+    img = ImageGrab.grab(bbox=box)
     img = img.convert("RGB")
     queue.append(img)
     if len(queue) > 1:
@@ -29,7 +28,7 @@ def _screen_analysis(diff_threshold_percentage: int, image_folder: str):
             file_path = f"{datetime.now().strftime('%Y-%m-%d_%H%M%S')}.jpeg"
             logging.info(f"{file_path = }")
             print(f"Saved image: {file_path}")
-            img.save(os.path.join(image_folder, file_path), quality=70)
+            img.save(os.path.join(image_folder, file_path))
 
 
 @log_times

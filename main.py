@@ -4,7 +4,7 @@ from typing import Union
 from pynput.keyboard import KeyCode, Key, Listener
 
 from src.config import ConfigAccessor
-from src.event_handler import KeyboardEventHandler
+from src.event_handler import KeyboardEventHandler, MouseEventHandler
 from callback import ScreenAnalysis, PeriodicScreenAnalysis, SettingConfig
 
 
@@ -18,12 +18,13 @@ logger = logging.getLogger(__name__)
 
 cfg_accessor = ConfigAccessor()
 hotkeys = cfg_accessor.cfg.hotkeys
+mouse_handler = MouseEventHandler()
+
 handlers = {
     hotkeys.screen_analysis: ScreenAnalysis(cfg_accessor),
     hotkeys.periodic_screen_analysis: PeriodicScreenAnalysis(cfg_accessor),
-    hotkeys.setting_config: SettingConfig(cfg_accessor),
+    hotkeys.setting_config: SettingConfig(cfg_accessor, mouse_handler),
 }
-
 keyboard_handler = KeyboardEventHandler(handlers)
 
 
