@@ -81,6 +81,7 @@ class SettingConfig:
         if box:
             cfg.screen_shot_area = self.mouse_handler.get_box()
             img = ImageGrab.grab(bbox=box).convert("RGB")
+            os.makedirs(cfg.image_folder, exist_ok=True)
             img.save(os.path.join(cfg.image_folder, "demo.jpeg"))
 
         self.cfg_proxy.save()
