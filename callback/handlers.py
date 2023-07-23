@@ -7,19 +7,21 @@ from pynput.mouse import Listener, Button
 from PIL import ImageGrab
 
 from src.config import ConfigAccessor
+from src.screenshot import ScreenshotProxy
 from src.event_handler import MouseEventHandler
-from .screen_analysis import _screen_analysis
 
 logger = logging.getLogger(__name__)
 
+screenshot_proxy = ScreenshotProxy()
 
 class ScreenAnalysis:
     def __init__(self, cfg_proxy: ConfigAccessor):
         self.cfg_proxy = cfg_proxy
+        self.screenshot_proxy = screenshot_proxy
 
     def __call__(self):
         cfg = self.cfg_proxy.cfg
-        _screen_analysis(
+        self.screenshot_proxy.screen_analysis(
             cfg.diff_threshold_percentage, cfg.image_folder, cfg.screen_shot_area
         )
 
@@ -27,6 +29,7 @@ class ScreenAnalysis:
 class PeriodicScreenAnalysis:
     def __init__(self, cfg_proxy: ConfigAccessor):
         self.cfg_proxy = cfg_proxy
+        self.screenshot_proxy = screenshot_proxy
 
     def __call__(self):
         cfg = self.cfg_proxy.cfg
@@ -34,7 +37,7 @@ class PeriodicScreenAnalysis:
         logger.info(f"{end_time = }")
         print(f"Job will end at {end_time}")
         while datetime.now() < end_time:
-            _screen_analysis(
+            self.screenshot_proxy.screen_analysis(
                 cfg.diff_threshold_percentage, cfg.image_folder, cfg.screen_shot_area
             )
             sleep(cfg.time_interval_sec)
