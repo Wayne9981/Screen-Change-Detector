@@ -43,5 +43,4 @@ class ScreenshotProxy:
                 file_path = f"{datetime.now().strftime('%Y-%m-%d_%H%M%S')}.jpeg"
                 logging.info(f"{file_path = }")
                 print(f"Saved image: {file_path}")
-                mss.tools.to_png(img.rgb, img.size, output=os.path.join(image_folder, file_path))
-
+                img.save(os.path.join(image_folder, file_path))
